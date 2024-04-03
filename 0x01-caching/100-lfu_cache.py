@@ -20,13 +20,15 @@ class LFUCache(BaseCaching):
         if key is None or item is None:
             return
 
-        # If cache is full, discard the least frequency used item (LFU algorithm)
+        # If cache is full, discard the least frequency used item
         if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
             min_freq = min(self.frequency.values())
             lfu_keys = [k for k, v in self.frequency.items() if v == min_freq]
             if len(lfu_keys) > 1:
                 lru_key = min(self.cache_data, key=self.cache_data.get)
-                lfu_key = min(lfu_keys, key=lambda x: self.cache_data.get(x, 0))
+                lfu_key = min(
+                        lfu_keys,
+                        key=lambda x: self.cache_data.get(x, 0))
                 if lru_key in lfu_keys:
                     del self.cache_data[lru_key]
                     print(f"DISCARD: {lru_key}")
