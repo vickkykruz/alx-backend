@@ -24,9 +24,9 @@ app.config.from_object(Config)
 def get_locale():
     """ This is a function that return the locale via request """
     # Check if 'locale' parameter is in the request URL
-    if 'locale' in request.args and request.args[
-            'locale'] in app.config['LANGUAGES']:
-        return request.args['locale']
+    lang = request.args.get('locale')
+    if lang and lang in app.config['LANGUAGES']:
+        return lang
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
