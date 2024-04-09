@@ -2,34 +2,32 @@
 """ This is a module run the index page on task 0 """
 
 
-from flask import Flask, render_template, request
-import flask_babel
+from flask import Flask, render_template
+from flask_babel import Babel, _
 
 
 app = Flask(__name__)
-babel = flask_babel.Babel(app)
+babel = Babel(app)
 
 
-class Config:
-    """ This is a Config class that handle the babel configuration """
-    LANGUAGES = ["en", "fr"]
-    BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_DEFAULT_TIMEZONE = 'UTC'
+# Set up Babel
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['LANGUAGES'] = {
+    'en': 'English',
+    'fr': 'French'
+}
 
 
-app.config.from_object(Config)
+# Routes
+@app.route('/')
+def home():
+    return render_template('3-index.html')
 
 
+# Jinja2 filters
 @babel.localeselector
 def get_locale():
-    """ This is a function that return the locale via request """
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
-@app.route('/')
-def index():
-    """ This is a function that render index page """
-    return render_template('3-index.html')
+    return 'fr'
 
 
 if __name__ == '__main__':
